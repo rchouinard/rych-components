@@ -49,6 +49,14 @@
                 </fileset>
             </batchtest>
         </phpunit>
+        <phpcodesniffer
+            standard="Zend"
+        >
+            <fileset dir="${build.path}">
+                <include name="library/**/*.php" />
+            </fileset>
+            <formatter type="checkstyle" outfile="${reports.path}/checkstyle.xml"/>
+        </phpcodesniffer>
     </target>
 
     <target
