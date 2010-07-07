@@ -1,5 +1,13 @@
 <?php
 /**
+ * Ryan Chouinard's Components
+ *
+ * @category    Rych
+ * @package     Rych
+ * @subpackage  UnitTests
+ * @author      Ryan Chouinard <rchouinard@gmail.com>
+ * @copyright   Copyright (c) 2009 Ryan Chouinard ({@link http://ryanchouinard.com})
+ * @license     New BSD License
  * @version     $Id$
  */
 
