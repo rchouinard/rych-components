@@ -21,23 +21,23 @@ require_once 'Rych/Ip2Location.php';
  * @author      Ryan Chouinard <rchouinard@gmail.com>
  * @license     New BSD License
  *
- * @property    $ipAddress
- * @property    $ipNumber
- * @property    $countryShort
- * @property    $countryLong
- * @property    $region
- * @property    $city
- * @property    $isp
- * @property    $latitude
- * @property    $longitude
- * @property    $domain
- * @property    $zipCode
- * @property    $timeZone
- * @property    $netSpeed
- * @property    $iddCode
- * @property    $areaCode
- * @property    $weatherCode
- * @property    $weatherName
+ * @property    string  $ipAddress
+ * @property    integer $ipNumber
+ * @property    string  $countryShort
+ * @property    string  $countryLong
+ * @property    string  $region
+ * @property    string  $city
+ * @property    string  $isp
+ * @property    float   $latitude
+ * @property    float   $longitude
+ * @property    string  $domain
+ * @property    string  $zipCode
+ * @property    string  $timeZone
+ * @property    string  $netSpeed
+ * @property    string  $iddCode
+ * @property    string  $areaCode
+ * @property    string  $weatherCode
+ * @property    string  $weatherName
  */
 class Rych_Ip2Location_Record
 {
