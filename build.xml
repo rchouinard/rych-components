@@ -55,7 +55,7 @@
             </fileset>
             <formatter type="checkstyle" outfile="${reports.path}/checkstyle.xml"/>
         </phpcodesniffer>
-        <phpcpd haltonerror="false">
+        <phpcpd>
             <fileset dir="${build.path}">
                 <include name="library/**/*.php" />
             </fileset>
