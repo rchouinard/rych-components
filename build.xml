@@ -61,6 +61,7 @@
             destdir="${docs.path}"
             sourcecode="yes"
             defaultpackagename="Rych"
+            defaultcategoryname="Rych"
             output="${docs.template}">
             <fileset dir="${build.path}">
                 <include name="**/*.php" />

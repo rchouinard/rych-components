@@ -5,7 +5,7 @@
  * @category    Rych
  * @package     Rych_Gravatar
  * @author      Ryan Chouinard <rchouinard@gmail.com>
- * @copyright   Copyright (c) 2009 Ryan Chouinard ({@link http://ryanchouinard.com})
+ * @copyright   Copyright (c) 2010 Ryan Chouinard ({@link http://ryanchouinard.com})
  * @license     New BSD License
  * @version     $Id$
  */
