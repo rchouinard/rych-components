@@ -11,6 +11,9 @@
  * @version     $Id$
  */
 
+/**
+ * @see         bootstrap.php
+ */
 require_once realpath(dirname(__FILE__) . '/../../bootstrap.php');
 
 /**
@@ -29,7 +32,6 @@ require_once 'Rych/Bencode/Encoder.php';
  * @subpackage  UnitTests
  * @author      Ryan Chouinard <rchouinard@gmail.com>
  * @license     New BSD License
- * @group       Rych_Bencode
  */
 class Rych_Bencode_EncoderTest extends PHPUnit_Framework_TestCase
 {

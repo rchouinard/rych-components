@@ -11,6 +11,9 @@
  * @version     $Id$
  */
 
+/**
+ * @see         bootstrap.php
+ */
 require_once realpath(dirname(__FILE__) . '/../bootstrap.php');
 
 /**
@@ -29,7 +32,6 @@ require_once 'Rych/Ip2Location.php';
  * @subpackage  UnitTests
  * @author      Ryan Chouinard <rchouinard@gmail.com>
  * @license     New BSD License
- * @group       Rych_Ip2Location
  */
 class Rych_Ip2LocationTest extends PHPUnit_Framework_TestCase
 {
