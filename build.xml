@@ -1,21 +1,73 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="rych-components" basedir="." default="dist">
 
+    <property name="build.path" value="build" />
+    <property name="reports.path" value="reports" />
     <property name="docs.path" value="docs" />
     <property name="docs.template" value="HTML:Smarty:PHP" />
+    <property name="dist.path" value="dist" />
 
-    <target name="build-docs" description="Builds the API documentation with PHPDocumentor.">
+    <target
+        name="clean"
+        description="Removes artifacts from a previous build."
+    >
+        <delete dir="${build.path}" />
+        <delete dir="${reports.path}" />
         <delete dir="${docs.path}" />
+        <delete dir="${dist.path}" />
+    </target>
+
+    <target
+        name="prepare"
+        description="Prepare the build directory."
+        depends="clean"
+    >
+        <mkdir dir="${build.path}" />
+        <copy todir="${build.path}">
+            <fileset dir=".">
+                <include name="library/**" />
+                <include name="tests/**" />
+            </fileset>
+        </copy>
+    </target>
+
+    <target
+        name="build-reports"
+        description="Run unit tests and compile related reports."
+        depends="prepare"
+    >
+        <mkdir dir="${reports.path}" />
+        <phpunit
+            printsummary="true"
+            bootstrap="tests/bootstrap.php"
+            haltonfailure="true"
+        >
+            <formatter type="xml" todir="${reports.path}" />
+            <batchtest>
+                <fileset dir="tests">
+                    <include name="**/*Test*.php" />
+                </fileset>
+            </batchtest>
+        </phpunit>
+    </target>
+
+    <target
+        name="build-docs"
+        description="Builds the API documentation with PHPDocumentor."
+        depends="prepare"
+    >
         <mkdir dir="${docs.path}" />
         <phpdoc title="API Documentation"
             destdir="${docs.path}"
             sourcecode="yes"
             defaultpackagename="Rych"
             output="${docs.template}">
-            <fileset dir=".">
+            <fileset dir="${build.path}">
                 <include name="**/*.php" />
             </fileset>
         </phpdoc>
     </target>
+
+    <target name="dist" depends="clean, prepare, build-reports, build-docs" />
 
 </project>
