@@ -32,8 +32,8 @@
     </target>
 
     <target
-        name="build-reports"
-        description="Run unit tests and compile related reports."
+        name="phpunit"
+        description="Run project unit tests."
         depends="prepare"
     >
         <mkdir dir="${reports.path}" />
@@ -49,19 +49,69 @@
                 </fileset>
             </batchtest>
         </phpunit>
+    </target>
+
+    <target
+        name="pdepend"
+        description="Run pdepend against the code base."
+        depends="prepare"
+    >
+        <mkdir dir="${reports.path}" />
+        <phpdepend>
+            <fileset dir="${build.path}">
+                <include name="library/**/*.php" />
+            </fileset>
+            <logger type="jdepend-xml" outfile="${reports.path}/pdepend.xml" />
+        </phpdepend>
+    </target>
+
+    <target
+        name="phpmd"
+        description="Run phpmd against the code base."
+        depends="prepare"
+    >
+        <mkdir dir="${reports.path}" />
+        <phpmd>
+            <fileset dir="${build.path}">
+                <include name="library/**/*.php" />
+            </fileset>
+            <formatter type="xml" outfile="${reports.path}/pmd.xml" />
+        </phpmd>
+    </target>
+
+    <target
+        name="phpcpd"
+        description="Run phpcpd against the code base."
+        depends="prepare"
+    >
+        <mkdir dir="${reports.path}" />
+        <phpcpd>
+            <fileset dir="${build.path}">
+                <include name="library/**/*.php" />
+            </fileset>
+            <formatter type="pmd" outfile="${reports.path}/pmd-cpd.xml" />
+        </phpcpd>
+    </target>
+
+    <target
+        name="phpcs"
+        description="Run PHP_CodeSniffer against the code base."
+        depends="prepare"
+    >
+        <mkdir dir="${reports.path}" />
         <phpcodesniffer standard="Zend">
             <fileset dir="${build.path}">
                 <include name="library/**/*.php" />
             </fileset>
             <formatter type="checkstyle" outfile="${reports.path}/checkstyle.xml"/>
         </phpcodesniffer>
-        <phpcpd>
-            <fileset dir="${build.path}">
-                <include name="library/**/*.php" />
-            </fileset>
-            <formatter type="pmd" outfile="${reports.path}/pmd.xml" />
-        </phpcpd>
     </target>
+
+    <target
+        name="build-reports"
+        description="Run unit tests and compile related reports."
+        depends="prepare, phpunit, pdepend, phpmd, phpcpd, phpcs"
+    />
 
     <target
         name="build-docs"
