@@ -38,6 +38,7 @@
     >
         <mkdir dir="${reports.path}" />
         <phpunit
+            codecoverage="true"
             printsummary="true"
             bootstrap="tests/bootstrap.php"
             haltonfailure="true"
