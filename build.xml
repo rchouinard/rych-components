@@ -33,25 +33,26 @@
 
     <target
         name="phpunit"
-        description="Run project unit tests."
+        description="Run project unit tests and generate coverage reports."
         depends="prepare"
     >
         <mkdir dir="${reports.path}" />
         <coverage-setup database="${reports.path}/coverage.db">
-            <fileset dir="${build.path}">
-                <include name="library/**/*.php"/>
+            <fileset dir="${build.path}/library">
+                <include name="**/*.php"/>
             </fileset>
         </coverage-setup>
         <phpunit
+            codecoverage="true"
             printsummary="true"
-            bootstrap="tests/bootstrap.php"
+            bootstrap="${build.path}/tests/bootstrap.php"
             haltonfailure="true"
         >
             <formatter type="xml" todir="${reports.path}" />
             <formatter type="clover" todir="${reports.path}" />
             <batchtest>
-                <fileset dir="${build.path}">
-                    <include name="tests/**/*Test*.php" />
+                <fileset dir="${build.path}/tests">
+                    <include name="**/*Test*.php" />
                 </fileset>
             </batchtest>
         </phpunit>
