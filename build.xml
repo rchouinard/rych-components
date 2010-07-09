@@ -37,16 +37,21 @@
         depends="prepare"
     >
         <mkdir dir="${reports.path}" />
+        <coverage-setup database="${reports.path}/coverage.db">
+            <fileset dir="${build.path}">
+                <include name="library/**/*.php"/>
+            </fileset>
+        </coverage-setup>
         <phpunit
-            codecoverage="true"
             printsummary="true"
             bootstrap="tests/bootstrap.php"
             haltonfailure="true"
         >
             <formatter type="xml" todir="${reports.path}" />
+            <formatter type="clover" todir="${reports.path}" />
             <batchtest>
-                <fileset dir="tests">
-                    <include name="**/*Test*.php" />
+                <fileset dir="${build.path}">
+                    <include name="tests/**/*Test*.php" />
                 </fileset>
             </batchtest>
         </phpunit>
