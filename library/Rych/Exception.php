@@ -5,7 +5,7 @@
  * @category    Rych
  * @package     Rych
  * @author      Ryan Chouinard <rchouinard@gmail.com>
- * @copyright   Copyright (c) 2010 Ryan Chouinard ({@link http://ryanchouinard.com})
+ * @copyright   Copyright (c) 2010 Ryan Chouinard
  * @license     New BSD License
  * @version     $Id$
  */

@@ -5,7 +5,7 @@
  * @category    Rych
  * @package     Rych_Gravatar
  * @author      Ryan Chouinard <rchouinard@gmail.com>
- * @copyright   Copyright (c) 2010 Ryan Chouinard ({@link http://ryanchouinard.com})
+ * @copyright   Copyright (c) 2010 Ryan Chouinard
  * @license     New BSD License
  * @version     $Id$
  */
@@ -88,13 +88,16 @@ class Rych_Gravatar
      */
     public function getUri($email)
     {
-        return sprintf('http://www.gravatar.com/avatar/%s.jpg?%s',
+        return sprintf(
+            'http://www.gravatar.com/avatar/%s.jpg?%s',
             $this->_hash($email),
-            http_build_query(array (
-                'r' => $this->getRating(),
-                's' => $this->getSize(),
-                'd' => $this->getDefault()
-            ))
+            http_build_query(
+                array (
+                    'r' => $this->getRating(),
+                    's' => $this->getSize(),
+                    'd' => $this->getDefault()
+                )
+            )
         );
     }
 
@@ -263,7 +266,8 @@ class Rych_Gravatar
      * @param   array   $options    Array of options to set
      * @return  void                Returns nothing
      */
-    protected function _setOptions(array $options) {
+    protected function _setOptions(array $options)
+    {
         $options = array_change_key_case($options, CASE_LOWER);
         foreach ($options as $option => $value) {
             switch ($option) {
