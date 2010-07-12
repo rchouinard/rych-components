@@ -5,7 +5,7 @@
  * @category    Rych
  * @package     Rych_Ip2Location
  * @author      Ryan Chouinard <rchouinard@gmail.com>
- * @copyright   Copyright (c) 2010 Ryan Chouinard ({@link http://ryanchouinard.com})
+ * @copyright   Copyright (c) 2010 Ryan Chouinard
  * @license     New BSD License
  * @version     $Id$
  */
@@ -149,7 +149,10 @@ class Rych_Ip2Location
      */
     public function getVersion()
     {
-        return date('Y.m.d', mktime(0, 0, 0, $this->dbMonth, $this->dbDay, 2000 + $this->dbYear));
+        return date(
+            'Y.m.d',
+            mktime(0, 0, 0, $this->dbMonth, $this->dbDay, 2000 + $this->dbYear)
+        );
     }
 
     /**
@@ -176,13 +179,17 @@ class Rych_Ip2Location
         $dbFile = realpath($dbFile);
         if (!file_exists($dbFile) || !is_readable($dbFile)) {
             require_once 'Rych/Ip2Location/Exception.php';
-            throw new Rych_Ip2Location_Exception('Specified file does not exist or cannot be read');
+            throw new Rych_Ip2Location_Exception(
+                'Specified file does not exist or cannot be read'
+            );
         }
 
         $dbHandle = fopen($dbFile, 'rb');
         if (!$dbHandle) {
             require_once 'Rych/Ip2Location/Exception.php';
-            throw new Rych_Ip2Location_Exception('Failed opening IP2Location database');
+            throw new Rych_Ip2Location_Exception(
+                'Failed opening IP2Location database'
+            );
         }
 
         $this->_dbFile   = $dbFile;
@@ -199,12 +206,16 @@ class Rych_Ip2Location
 
         if (!in_array($this->dbType, range(1, 18)) || !in_array($this->dbColumns, range(2, 15))) {
             require_once 'Rych/Ip2Location/Exception.php';
-            throw new Rych_Ip2Location_Exception('File does not appear to be a valid IP2Location database.');
+            throw new Rych_Ip2Location_Exception(
+                'File does not appear to be a valid IP2Location database.'
+            );
         }
 
         if (0 != $this->ipVersion) {
             require_once 'Rych/Ip2Location/Exception.php';
-            throw new Rych_Ip2Location_Exception('This library currently supports only IPv4');
+            throw new Rych_Ip2Location_Exception(
+                'This library currently supports only IPv4'
+            );
         }
 
         return $this;
@@ -254,7 +265,7 @@ class Rych_Ip2Location
         }
 
         $realIpNo = ip2long($ipAddr);
-        $realIpNo = ($realIpNo < 0) ? $realIpNo + pow(2,32) : $realIpNo;
+        $realIpNo = ($realIpNo < 0) ? $realIpNo + pow(2, 32) : $realIpNo;
 
         $recordData = array (
             'ipAddress'     => $ipAddr,
@@ -374,7 +385,7 @@ class Rych_Ip2Location
 
         $values = array_values($array);
         $i = 0;
-        foreach (explode ('/', $format) as $value) {
+        foreach (explode('/', $format) as $value) {
             $repeater = (int) substr($value, 1);
             if ($repeater == 0) {
                 $repeater = 1;
@@ -388,7 +399,7 @@ class Rych_Ip2Location
             }
             $j = $i + $repeater;
             for ($a = $i; $a < $j; ++$a) {
-               $p = pack ('d', $values[$i]);
+               $p = pack('d', $values[$i]);
                $p = strrev($p);
                list ($values[$i]) = array_values(unpack('d1d', $p));
                ++$i;
@@ -439,14 +450,26 @@ class Rych_Ip2Location
         $data = fread($this->_dbHandle, 16);
 
         $array = preg_split('//', $data, -1, PREG_SPLIT_NO_EMPTY);
-        if(count($array) != 16) {
+        if (count($array) != 16) {
             return 0;
         }
 
-        $ip96_127 = $this->_unpack('V', $array[0]  . $array[1]  . $array[2]  . $array[3]);
-        $ip64_95  = $this->_unpack('V', $array[4]  . $array[5]  . $array[6]  . $array[7]);
-        $ip32_63  = $this->_unpack('V', $array[8]  . $array[9]  . $array[10] . $array[11]);
-        $ip1_31   = $this->_unpack('V', $array[12] . $array[13] . $array[14] . $array[15]);
+        $ip96_127 = $this->_unpack(
+            'V',
+            $array[0] . $array[1] . $array[2] . $array[3]
+        );
+        $ip64_95 = $this->_unpack(
+            'V',
+            $array[4] . $array[5] . $array[6] . $array[7]
+        );
+        $ip32_63 = $this->_unpack(
+            'V',
+            $array[8] . $array[9] . $array[10] . $array[11]
+        );
+        $ip1_31 = $this->_unpack(
+            'V',
+            $array[12] . $array[13] . $array[14] . $array[15]
+        );
 
         if ($ip96_127[1] < 0) {
             $ip96_127[1] += 4294967296;
@@ -464,9 +487,11 @@ class Rych_Ip2Location
         $bcresult = bcadd(
             bcadd(
                 bcmul($ip1_31[1], bcpow(4294967296, 3)),
-                bcmul($ip32_63[1], bcpow(4294967296, 2))),
+                bcmul($ip32_63[1], bcpow(4294967296, 2))
+            ),
             bcadd(
-                bcmul($ip64_95[1], 4294967296), $ip96_127[1]));
+                bcmul($ip64_95[1], 4294967296), $ip96_127[1])
+            );
         return $bcresult;
     }
 
@@ -502,21 +527,21 @@ class Rych_Ip2Location
     protected function _isValidIp($ipAddr)
     {
         $validIp = true;
-        if(!preg_match('/^[\d\.]+$/', $ipAddr)) {
+        if (!preg_match('/^[\d\.]+$/', $ipAddr)) {
             $validIp = false;
         }
-        else if(preg_match('/^\.|\.\.|\.$/', $ipAddr)) {
+        else if (preg_match('/^\.|\.\.|\.$/', $ipAddr)) {
             $validIp = false;
         }
 
         $ipParts = preg_split('/\./', $ipAddr);
-        if((1 > count($ipParts)) || (4 < count($ipParts))) {
+        if ((1 > count($ipParts)) || (4 < count($ipParts))) {
             $validIp = false;
         }
 
         if ($validIp) {
             foreach ($ipParts as $ipPart) {
-                if($ipPart < 0 or $ipPart > 255) {
+                if ($ipPart < 0 or $ipPart > 255) {
                     $validIp = false;
                     break;
                 }

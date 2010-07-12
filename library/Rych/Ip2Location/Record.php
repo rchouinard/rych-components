@@ -5,7 +5,7 @@
  * @category    Rych
  * @package     Rych_Ip2Location
  * @author      Ryan Chouinard <rchouinard@gmail.com>
- * @copyright   Copyright (c) 2010 Ryan Chouinard ({@link http://ryanchouinard.com})
+ * @copyright   Copyright (c) 2010 Ryan Chouinard
  * @license     New BSD License
  * @version     $Id$
  */
@@ -108,7 +108,9 @@ class Rych_Ip2Location_Record
         // unused arguments :-)
         if (isset ($value)) {
             require_once 'Rych/Ip2Location/Exception.php';
-            throw new Rych_Ip2Location_Exception("Cannot modify read-only property '{$name}'");
+            throw new Rych_Ip2Location_Exception(
+                "Cannot modify read-only property '{$name}'"
+            );
         }
     }
 
