@@ -108,18 +108,19 @@
         depends="prepare"
     >
         <mkdir dir="${docs.path}" />
-        <phpdoc title="API Documentation"
+        <phpdoc
+            title="API Documentation"
             destdir="${docs.path}"
-            sourcecode="yes"
+            sourcecode="true"
             defaultpackagename="Rych"
-            defaultcategoryname="Rych"
-            output="${docs.template}">
+            output="${docs.template}"
+        >
             <fileset dir="${build.path}">
-                <include name="**/*.php" />
+                <include name="library/**/*.php" />
             </fileset>
         </phpdoc>
     </target>
 
-    <target name="dist" depends="clean, prepare, build-reports" />
+    <target name="dist" depends="clean, prepare, build-reports, build-docs" />
 
 </project>
