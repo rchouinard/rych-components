@@ -301,41 +301,112 @@ class Rych_Ip2Location
             if (($ipNo >= $ipFrom) && ($ipNo < $ipTo)) {
 
                 if ($this->hasFeature(self::FEATURE_COUNTRY)) {
-                    $recordData['countryShort'] = $this->_readStr($this->_read32($this->dbAddr + ($mid * $this->dbColumns * 4) + 4 * ($this->_getDbPosition('country') - 1)));
-                    $recordData['countryLong']  = $this->_readStr($this->_read32($this->dbAddr + ($mid * $this->dbColumns * 4) + 4 * ($this->_getDbPosition('country') - 1)) + 3);
+                    $recordData['countryShort'] = $this->_readStr(
+                        $this->_read32(
+                            $this->dbAddr + ($mid * $this->dbColumns * 4) + 4
+                            * ($this->_getDbPosition('country') - 1)
+                        )
+                    );
+                    $recordData['countryLong']  = $this->_readStr(
+                        $this->_read32(
+                            $this->dbAddr + ($mid * $this->dbColumns * 4) + 4
+                            * ($this->_getDbPosition('country') - 1)
+                        ) + 3
+                    );
                 }
                 if ($this->hasFeature(self::FEATURE_REGION)) {
-                    $recordData['region'] = $this->_readStr($this->_read32($this->dbAddr + ($mid * $this->dbColumns * 4) + 4 * ($this->_getDbPosition('region') - 1)));
+                    $recordData['region'] = $this->_readStr(
+                        $this->_read32(
+                            $this->dbAddr + ($mid * $this->dbColumns * 4) + 4
+                            * ($this->_getDbPosition('region') - 1)
+                        )
+                    );
                 }
                 if ($this->hasFeature(self::FEATURE_CITY)) {
-                    $recordData['city'] = $this->_readStr($this->_read32($this->dbAddr + ($mid * $this->dbColumns * 4) + 4 * ($this->_getDbPosition('city') - 1)));
+                    $recordData['city'] = $this->_readStr(
+                        $this->_read32(
+                            $this->dbAddr + ($mid * $this->dbColumns * 4) + 4
+                            * ($this->_getDbPosition('city') - 1)
+                        )
+                    );
                 }
                 if ($this->hasFeature(self::FEATURE_ISP)) {
-                    $recordData['isp'] = $this->_readStr($this->_read32($this->dbAddr + ($mid * $this->dbColumns * 4) + 4 * ($this->_getDbPosition('isp') - 1)));
+                    $recordData['isp'] = $this->_readStr(
+                        $this->_read32(
+                            $this->dbAddr + ($mid * $this->dbColumns * 4) + 4
+                            * ($this->_getDbPosition('isp') - 1)
+                        )
+                    );
                 }
                 if ($this->hasFeature(self::FEATURE_LATLON)) {
-                    $recordData['latitude'] = $this->_readFloat($this->dbAddr + ($mid * $this->dbColumns * 4) + 4 * ($this->_getDbPosition('latitude') - 1));
-                    $recordData['longitude'] = $this->_readFloat($this->dbAddr + ($mid * $this->dbColumns * 4) + 4 * ($this->_getDbPosition('longitude') - 1));
+                    $recordData['latitude'] = $this->_readFloat(
+                        $this->dbAddr + ($mid * $this->dbColumns * 4) + 4
+                        * ($this->_getDbPosition('latitude') - 1)
+                    );
+                    $recordData['longitude'] = $this->_readFloat(
+                        $this->dbAddr + ($mid * $this->dbColumns * 4) + 4
+                        * ($this->_getDbPosition('longitude') - 1)
+                    );
                 }
                 if ($this->hasFeature(self::FEATURE_DOMAIN)) {
-                    $recordData['domain'] = $this->_readStr($this->_read32($this->dbAddr + ($mid * $this->dbColumns * 4) + 4 * ($this->_getDbPosition('domain') - 1)));
+                    $recordData['domain'] = $this->_readStr(
+                        $this->_read32(
+                            $this->dbAddr + ($mid * $this->dbColumns * 4) + 4
+                            * ($this->_getDbPosition('domain') - 1)
+                        )
+                    );
                 }
                 if ($this->hasFeature(self::FEATURE_ZIPCODE)) {
-                    $recordData['zipCode'] = $this->_readStr($this->_read32($this->dbAddr + ($mid * $this->dbColumns * 4) + 4 * ($this->_getDbPosition('zipcode') - 1)));
+                    $recordData['zipCode'] = $this->_readStr(
+                        $this->_read32(
+                            $this->dbAddr + ($mid * $this->dbColumns * 4) + 4
+                            * ($this->_getDbPosition('zipcode') - 1)
+                        )
+                    );
                 }
                 if ($this->hasFeature(self::FEATURE_TIMEZONE)) {
-                    $recordData['timeZone'] = $this->_readStr($this->_read32($this->dbAddr + ($mid * $this->dbColumns * 4) + 4 * ($this->_getDbPosition('timezone') - 1)));
+                    $recordData['timeZone'] = $this->_readStr(
+                        $this->_read32(
+                            $this->dbAddr + ($mid * $this->dbColumns * 4) + 4
+                            * ($this->_getDbPosition('timezone') - 1)
+                        )
+                    );
                 }
                 if ($this->hasFeature(self::FEATURE_NETSPEED)) {
-                    $recordData['netSpeed'] = $this->_readStr($this->_read32($this->dbAddr + ($mid * $this->dbColumns * 4) + 4 * ($this->_getDbPosition('netspeed') - 1)));
+                    $recordData['netSpeed'] = $this->_readStr(
+                        $this->_read32(
+                            $this->dbAddr + ($mid * $this->dbColumns * 4) + 4
+                            * ($this->_getDbPosition('netspeed') - 1)
+                        )
+                    );
                 }
                 if ($this->hasFeature(self::FEATURE_AREACODE)) {
-                    $recordData['iddCode'] = $this->_readStr($this->_read32($this->dbAddr + ($mid * $this->dbColumns * 4) + 4 * ($this->_getDbPosition('iddcode') - 1)));
-                    $recordData['areaCode'] = $this->_readStr($this->_read32($this->dbAddr + ($mid * $this->dbColumns * 4) + 4 * ($this->_getDbPosition('areacode') - 1)));
+                    $recordData['iddCode'] = $this->_readStr(
+                        $this->_read32(
+                            $this->dbAddr + ($mid * $this->dbColumns * 4) + 4
+                            * ($this->_getDbPosition('iddcode') - 1)
+                        )
+                    );
+                    $recordData['areaCode'] = $this->_readStr(
+                        $this->_read32(
+                            $this->dbAddr + ($mid * $this->dbColumns * 4) + 4
+                            * ($this->_getDbPosition('areacode') - 1)
+                        )
+                    );
                 }
                 if ($this->hasFeature(self::FEATURE_WEATHER)) {
-                    $recordData['weatherCode'] = $this->_readStr($this->_read32($this->dbAddr + ($mid * $this->dbColumns * 4) + 4 * ($this->_getDbPosition('weathercode') - 1)));
-                    $recordData['weatherName'] = $this->_readStr($this->_read32($this->dbAddr + ($mid * $this->dbColumns * 4) + 4 * ($this->_getDbPosition('weathername') - 1)));
+                    $recordData['weatherCode'] = $this->_readStr(
+                        $this->_read32(
+                            $this->dbAddr + ($mid * $this->dbColumns * 4) + 4
+                            * ($this->_getDbPosition('weathercode') - 1)
+                        )
+                    );
+                    $recordData['weatherName'] = $this->_readStr(
+                        $this->_read32(
+                            $this->dbAddr + ($mid * $this->dbColumns * 4) + 4
+                            * ($this->_getDbPosition('weathername') - 1)
+                        )
+                    );
                 }
 
                 break;
@@ -490,8 +561,10 @@ class Rych_Ip2Location
                 bcmul($ip32_63[1], bcpow(4294967296, 2))
             ),
             bcadd(
-                bcmul($ip64_95[1], 4294967296), $ip96_127[1])
-            );
+                bcmul($ip64_95[1], 4294967296),
+                $ip96_127[1]
+            )
+        );
         return $bcresult;
     }
 
@@ -529,8 +602,7 @@ class Rych_Ip2Location
         $validIp = true;
         if (!preg_match('/^[\d\.]+$/', $ipAddr)) {
             $validIp = false;
-        }
-        else if (preg_match('/^\.|\.\.|\.$/', $ipAddr)) {
+        } else if (preg_match('/^\.|\.\.|\.$/', $ipAddr)) {
             $validIp = false;
         }
 
