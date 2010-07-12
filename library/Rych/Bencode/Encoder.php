@@ -5,7 +5,7 @@
  * @category    Rych
  * @package     Rych_Bencode
  * @author      Ryan Chouinard <rchouinard@gmail.com>
- * @copyright   Copyright (c) 2010 Ryan Chouinard ({@link http://ryanchouinard.com})
+ * @copyright   Copyright (c) 2010 Ryan Chouinard
  * @license     New BSD License
  * @version     $Id$
  */
@@ -59,7 +59,7 @@ class Rych_Bencode_Encoder
     {
         $data = is_null($data) ? $this->_data : $data;
 
-        if (is_array ($data) && (isset ($data[0]) || empty ($data))) {
+        if (is_array($data) && (isset ($data[0]) || empty ($data))) {
             return $this->_encodeList($data);
         } else if (is_array($data)) {
             return $this->_encodeDict($data);

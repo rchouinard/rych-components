@@ -5,7 +5,7 @@
  * @category    Rych
  * @package     Rych_Bencode
  * @author      Ryan Chouinard <rchouinard@gmail.com>
- * @copyright   Copyright (c) 2010 Ryan Chouinard ({@link http://ryanchouinard.com})
+ * @copyright   Copyright (c) 2010 Ryan Chouinard
  * @license     New BSD License
  * @version     $Id$
  */
@@ -62,7 +62,11 @@ class Rych_Bencode_Decoder
         $this->_source = $source;
         $this->_sourceLength = strlen($this->_source);
 
-        if (!in_array($decodeType, array(Rych_Bencode::TYPE_ARRAY, Rych_Bencode::TYPE_OBJECT))) {
+        $decodeTypes = array (
+            Rych_Bencode::TYPE_ARRAY,
+            Rych_Bencode::TYPE_OBJECT
+        );
+        if (!in_array($decodeType, $decodeTypes)) {
             $decodeType = Rych_Bencode::TYPE_ARRAY;
         }
 
@@ -72,26 +76,30 @@ class Rych_Bencode_Decoder
     /**
      * Takes a bencode encoded string and converts it to an array.
      *
-     * @param   string  $source             The bencode encoded string
-     * @param   string  $objectDecodeType   Return an array or an object
+     * @param   string  $source         The bencode encoded string
+     * @param   string  $decodeType     Return an array or an object
      * @return  array
      * @throws  Rych_Bencode_Exception
      *
-     * @todo    Convert resulting array to object if $objectDecodeType is object
+     * @todo    Convert resulting array to object if $decodeType is object
      */
-    static public function decode($source, $objectDecodeType = Rych_Bencode::TYPE_ARRAY)
+    static public function decode($source, $decodeType = Rych_Bencode::TYPE_ARRAY)
     {
         if (!is_string($source)) {
             require_once 'Rych/Bencode/Exception.php';
-            throw new Rych_Bencode_Exception('Argument expected to be a string; Got ' . gettype($source));
+            throw new Rych_Bencode_Exception(
+                'Argument expected to be a string; Got ' . gettype($source)
+            );
         }
 
-        $decoder = new self($source, $objectDecodeType);
+        $decoder = new self($source, $decodeType);
         $decoded = $decoder->_decode();
 
         if ($decoder->_offset != $decoder->_sourceLength) {
             require_once 'Rych/Bencode/Exception.php';
-            throw new Rych_Bencode_Exception('Found multiple entities outside list or dict definitions');
+            throw new Rych_Bencode_Exception(
+                'Found multiple entities outside list or dict definitions'
+            );
         }
 
         return $decoded;
@@ -129,7 +137,9 @@ class Rych_Bencode_Decoder
         }
 
         require_once 'Rych/Bencode/Exception.php';
-        throw new Rych_Bencode_Exception("Unknown entity found at offset {$this->_offset}");
+        throw new Rych_Bencode_Exception(
+            "Unknown entity found at offset {$this->_offset}"
+        );
     }
 
     /**
@@ -165,12 +175,18 @@ class Rych_Bencode_Decoder
         for (; $currentOffset < $offsetOfE; ++$currentOffset) {
             if (!$this->_isDigit($this->_getChar($currentOffset))) {
                 require_once 'Rych/Bencode/Exception.php';
-                throw new Rych_Bencode_Exception('Non-numeric character found in integer entity');
+                throw new Rych_Bencode_Exception(
+                    'Non-numeric character found in integer entity'
+                );
             }
         }
 
         // Pull the whole record from the encoded source
-        $value = substr($this->_source, $this->_offset, $offsetOfE - $this->_offset);
+        $value = substr(
+            $this->_source,
+            $this->_offset,
+            $offsetOfE - $this->_offset
+        );
 
         // One last check to make sure zero-padded integers don't slip by, as
         // they're not allowed per bencode specification.
@@ -178,7 +194,9 @@ class Rych_Bencode_Decoder
         if (1 < strlen($absoluteValue) && '0' == substr($absoluteValue, 0, 1)) {
             // TODO: Could probably just trigger a warning here
             require_once 'Rych/Bencode/Exception.php';
-            throw new Rych_Bencode_Exception('Leading zero found in integer entity');
+            throw new Rych_Bencode_Exception(
+                'Leading zero found in integer entity'
+            );
         }
 
         // Advance the global offset
@@ -264,7 +282,9 @@ class Rych_Bencode_Decoder
         // Check if we ran out of characters before we found the 'e' :-)
         if (!$terminated && false === $this->_getChar()) {
             require_once 'Rych/Bencode/Exception.php';
-            throw new Rych_Bencode_Exception('Unterminated dictionary definition');
+            throw new Rych_Bencode_Exception(
+                'Unterminated dictionary definition'
+            );
         }
 
         // Advance the global offset
@@ -285,7 +305,9 @@ class Rych_Bencode_Decoder
         if ('0' === $this->_getChar() && ':' != $this->_getChar($this->_offset + 1)) {
             // TODO: Trigger a warning instead?
             require_once 'Rych/Bencode/Exception.php';
-            throw new Rych_Bencode_Exception('Found leading zero in string entity length declaration');
+            throw new Rych_Bencode_Exception(
+                'Found leading zero in string entity length declaration'
+            );
         }
 
         // Find the colon
@@ -297,7 +319,11 @@ class Rych_Bencode_Decoder
         }
 
         // Find the length of the string
-        $contentLength = (int) substr($this->_source, $this->_offset, $offsetOfColon);
+        $contentLength = (int) substr(
+            $this->_source,
+            $this->_offset,
+            $offsetOfColon
+        );
 
         // Check if we have the entire string, or if our source is truncated
         if (($contentLength + $offsetOfColon + 1) > $this->_sourceLength) {
@@ -338,8 +364,10 @@ class Rych_Bencode_Decoder
      */
     protected function _isDigit($char)
     {
-        return in_array($char,
-            array ('0', '1', '2', '3', '4', '5', '6', '7', '8', '9'));
+        return in_array(
+            $char,
+            array ('0', '1', '2', '3', '4', '5', '6', '7', '8', '9')
+        );
     }
 
 }

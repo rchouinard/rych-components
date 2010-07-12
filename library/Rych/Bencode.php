@@ -5,7 +5,7 @@
  * @category    Rych
  * @package     Rych_Bencode
  * @author      Ryan Chouinard <rchouinard@gmail.com>
- * @copyright   Copyright (c) 2010 Ryan Chouinard ({@link http://ryanchouinard.com})
+ * @copyright   Copyright (c) 2010 Ryan Chouinard
  * @license     New BSD License
  * @version     $Id$
  */
@@ -40,12 +40,12 @@ class Rych_Bencode
      *
      * @uses    Rych_Bencode_Decoder::decode()
      * @param   string  $encodedValue
-     * @param   string  $objectDecodeType
+     * @param   string  $decodeType
      * @return  mixed
      */
-    public static function decode($encodedValue, $objectDecodeType = self::TYPE_ARRAY)
+    public static function decode($encodedValue, $decodeType = self::TYPE_ARRAY)
     {
-        return Rych_Bencode_Decoder::decode($encodedValue, $objectDecodeType);
+        return Rych_Bencode_Decoder::decode($encodedValue, $decodeType);
     }
 
     /**
