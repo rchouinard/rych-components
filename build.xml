@@ -120,6 +120,6 @@
         </phpdoc>
     </target>
 
-    <target name="dist" depends="clean, prepare, build-reports, build-docs" />
+    <target name="dist" depends="clean, prepare, build-reports" />
 
 </project>
