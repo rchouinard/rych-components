@@ -11,17 +11,11 @@
  */
 
 /**
- * @see         Rych_Exception
- */
-require_once 'Rych/Exception.php';
-
-/**
- * @uses        Rych_Exception
  * @category    Rych
  * @package     Rych_Ip2Location
  * @author      Ryan Chouinard <rchouinard@gmail.com>
  * @license     New BSD License
  */
-class Rych_Ip2Location_Exception extends Rych_Exception
+class Rych_Ip2Location_Exception extends Exception
 {
 }
