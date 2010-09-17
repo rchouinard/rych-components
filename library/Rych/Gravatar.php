@@ -74,9 +74,10 @@ class Rych_Gravatar
      */
     public function __construct(array $options = array ())
     {
-        $this->_default = self::DEFAULT_GRAVATAR;
-        $this->setRating(self::RATING_G);
-        $this->setSize(80);
+        $this
+            ->setDefault(self::DEFAULT_GRAVATAR)
+            ->setRating(self::RATING_G)
+            ->setSize(80);
         $this->_setOptions($options);
     }
 
