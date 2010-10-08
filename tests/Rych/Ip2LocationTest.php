@@ -62,7 +62,7 @@ class Rych_Ip2LocationTest extends PHPUnit_Framework_TestCase
     public function testCanLoadDbFile()
     {
         $ip2loc = new Rych_Ip2Location;
-        $ip2loc->setDbFile(LIBRARY_ROOT . '/tests/_files/DB1-DEMO.bin');
+        $ip2loc->setDbFile(LIBRARY_ROOT . '/tests/_files/Rych/Ip2Location/DB1-DEMO.bin');
         $this->assertEquals('2008.08.07', $ip2loc->getVersion());
     }
 
@@ -71,7 +71,7 @@ class Rych_Ip2LocationTest extends PHPUnit_Framework_TestCase
      */
     public function testConstructorCanLoadDbFile()
     {
-        $ip2loc = new Rych_Ip2Location(LIBRARY_ROOT . '/tests/_files/DB1-DEMO.bin');
+        $ip2loc = new Rych_Ip2Location(LIBRARY_ROOT . '/tests/_files/Rych/Ip2Location/DB1-DEMO.bin');
         $this->assertEquals('2008.08.07', $ip2loc->getVersion());
     }
 
@@ -80,7 +80,7 @@ class Rych_Ip2LocationTest extends PHPUnit_Framework_TestCase
      */
     public function testCanSetDefaultDbFile()
     {
-        Rych_Ip2Location::setDefaultDbFile(LIBRARY_ROOT . '/tests/_files/DB1-DEMO.bin');
+        Rych_Ip2Location::setDefaultDbFile(LIBRARY_ROOT . '/tests/_files/Rych/Ip2Location/DB1-DEMO.bin');
         $ip2loc = new Rych_Ip2Location;
         $this->assertEquals('2008.08.07', $ip2loc->getVersion());
     }
@@ -88,7 +88,7 @@ class Rych_Ip2LocationTest extends PHPUnit_Framework_TestCase
     public function testFeatureDetection()
     {
         $ip2loc = new Rych_Ip2Location;
-        $ip2loc->setDbFile(LIBRARY_ROOT . '/tests/_files/DB1-DEMO.bin');
+        $ip2loc->setDbFile(LIBRARY_ROOT . '/tests/_files/Rych/Ip2Location/DB1-DEMO.bin');
         $this->assertEquals(true, $ip2loc->hasFeature(Rych_Ip2Location::FEATURE_COUNTRY));
         $this->assertEquals(false, $ip2loc->hasFeature(Rych_Ip2Location::FEATURE_LATLON));
     }
@@ -99,7 +99,7 @@ class Rych_Ip2LocationTest extends PHPUnit_Framework_TestCase
     public function DISABLEtestFullLookup()
     {
         try {
-            $ip2loc = new Rych_Ip2Location(LIBRARY_ROOT . '/tests/_files/DB18-DEMO.bin');
+            $ip2loc = new Rych_Ip2Location(LIBRARY_ROOT . '/tests/_files/Rych/Ip2Location/DB1-DEMO.bin');
         } catch (Rych_Ip2Location_Exception $e) {
             $this->markTestSkipped('Required sample database file not found; ' .
                                    'DB18 must be in ' .
@@ -134,7 +134,7 @@ class Rych_Ip2LocationTest extends PHPUnit_Framework_TestCase
      */
     public function testPartialLookup()
     {
-        $ip2loc = new Rych_Ip2Location(LIBRARY_ROOT . '/tests/_files/DB1-DEMO.bin');
+        $ip2loc = new Rych_Ip2Location(LIBRARY_ROOT . '/tests/_files/Rych/Ip2Location/DB1-DEMO.bin');
         // Fun fact: the IP belongs to ip2location.com :-)
         $record = $ip2loc->lookup('70.86.96.219');
 
