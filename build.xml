@@ -123,4 +123,37 @@
 
     <target name="dist" depends="clean, prepare, build-reports, build-docs" />
 
+    <target
+        name="dist-tarball"
+        description="Prepare the components for distribution via tarball"
+        depends="dist"
+    >
+        <tstamp>
+            <format property="archive.release.tstamp" pattern="%Y.%j.%H%M" />
+        </tstamp>
+        <propertyprompt
+            propertyName="archive.release.version"
+            promptText="Version string for the archive"
+            promptCharacter=":"
+            defaultValue="${archive.release.tstamp}"
+            useExistingValue="true"
+        />
+        <copy todir="${dist.path}/tarball/rych-${archive.release.version}-bundled">
+            <filterchain>
+                <replaceregexp>
+                    <regexp pattern="\$Id:?.*\$" replace="${archive.release.version}-bundled" />
+                </replaceregexp>
+            </filterchain>
+            <fileset dir="${build.path}">
+                <include name="library/**" />
+                <include name="tests/**" />
+            </fileset>
+        </copy>
+        <tar
+            destfile="${dist.path}/rych-${archive.release.version}-bundled.tar.gz"
+            basedir="${dist.path}/tarball"
+            compression="gzip"
+        />
+    </target>
+
 </project>
