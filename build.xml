@@ -7,6 +7,10 @@
     <property name="docs.template" value="HTML:Smarty:PHP" />
     <property name="dist.path" value="dist" />
 
+    <!--
+        Clear the source directory of any artificats from a previous
+        run of the build tool.
+    -->
     <target
         name="clean"
         description="Removes artifacts from a previous build."
@@ -17,11 +21,20 @@
         <delete dir="${dist.path}" />
     </target>
 
+    <!--
+        Create a clean copy of the source files, without version control
+        and other "meta" files and directories.
+
+        This gives a "clean slate" on which other build tasks can operate.
+    -->
     <target
         name="prepare"
-        description="Prepare the build directory."
+        description="Prepares the build directory for future operations."
         depends="clean"
     >
+        <tstamp>
+            <format property="release.tstamp" pattern="%Y.%j.%H%M%z" />
+        </tstamp>
         <mkdir dir="${build.path}" />
         <copy todir="${build.path}">
             <fileset dir=".">
@@ -31,63 +44,42 @@
         </copy>
     </target>
 
+    <!--
+        Generate a myriad of reports from the project source. Current reports
+        include:
+
+          - PHPUnit jUnit
+          - PHPUnit Clover
+          - PDepends
+          - PHP Mess Detector
+          - PHP Copy-Paste Detector
+          - PHP Code Sniffer
+    -->
     <target
-        name="phpunit"
-        description="Run project unit tests and generate coverage reports."
+        name="build-reports"
+        description="Run unit tests and analytic tools against the code base."
         depends="prepare"
     >
         <mkdir dir="${reports.path}" />
         <exec command="phpunit --coverage-clover ${reports.path}/clover.xml --log-junit ${reports.path}/junit.xml --bootstrap ${build.path}/tests/bootstrap.php ${build.path}/tests" />
-    </target>
-
-    <target
-        name="pdepend"
-        description="Run pdepend against the code base."
-        depends="prepare"
-    >
-        <mkdir dir="${reports.path}" />
         <phpdepend>
             <fileset dir="${build.path}">
                 <include name="library/**/*.php" />
             </fileset>
             <logger type="jdepend-xml" outfile="${reports.path}/pdepend.xml" />
         </phpdepend>
-    </target>
-
-    <target
-        name="phpmd"
-        description="Run phpmd against the code base."
-        depends="prepare"
-    >
-        <mkdir dir="${reports.path}" />
         <phpmd>
             <fileset dir="${build.path}">
                 <include name="library/**/*.php" />
             </fileset>
             <formatter type="xml" outfile="${reports.path}/pmd.xml" />
         </phpmd>
-    </target>
-
-    <target
-        name="phpcpd"
-        description="Run phpcpd against the code base."
-        depends="prepare"
-    >
-        <mkdir dir="${reports.path}" />
         <phpcpd>
             <fileset dir="${build.path}">
                 <include name="library/**/*.php" />
             </fileset>
             <formatter type="pmd" outfile="${reports.path}/pmd-cpd.xml" />
         </phpcpd>
-    </target>
-
-    <target
-        name="phpcs"
-        description="Run PHP_CodeSniffer against the code base."
-        depends="prepare"
-    >
-        <mkdir dir="${reports.path}" />
         <phpcodesniffer standard="Zend">
             <fileset dir="${build.path}">
                 <include name="library/**/*.php" />
@@ -96,12 +88,10 @@
         </phpcodesniffer>
     </target>
 
-    <target
-        name="build-reports"
-        description="Run unit tests and compile related reports."
-        depends="prepare, phpunit, pdepend, phpmd, phpcpd, phpcs"
-    />
-
+    <!--
+        Generate class API documentation from project source using
+        PhpDocumentor.
+     -->
     <target
         name="build-docs"
         description="Builds the API documentation with PHPDocumentor."
@@ -121,27 +111,35 @@
         </phpdoc>
     </target>
 
-    <target name="dist" depends="clean, prepare, build-reports, build-docs" />
+    <!--
+        Generate source repors and API documentation in one go.
 
+        This should probably be renamed, as the task doesn't actually prepare
+        the code base for distribution.
+    -->
+    <target name="dist" depends="build-reports, build-docs" />
+
+    <!--
+        Package the entire project source as a single tarball. This gives each
+        component the same version number, set apart from standalone releases
+        with the "Bundled" postfix.
+    -->
     <target
-        name="dist-tarball"
-        description="Prepare the components for distribution via tarball"
-        depends="dist"
+        name="dist:tarball"
+        description="Prepare the components for distribution via tarball."
+        depends="prepare"
     >
-        <tstamp>
-            <format property="archive.release.tstamp" pattern="%Y.%j.%H%M%z" />
-        </tstamp>
         <propertyprompt
-            propertyName="archive.release.version"
+            propertyName="bundle.release.version"
             promptText="Version string for the archive"
             promptCharacter=":"
-            defaultValue="${archive.release.tstamp}"
+            defaultValue="${release.tstamp}"
             useExistingValue="true"
         />
-        <copy todir="${dist.path}/tarball/rych-components-${archive.release.version}">
+        <copy todir="${dist.path}/tarball/rych-components-${bundle.release.version}">
             <filterchain>
                 <replaceregexp>
-                    <regexp pattern="\$Id:?.*\$" replace="${archive.release.version} Bundled" />
+                    <regexp pattern="\$Id:?.*\$" replace="${bundle.release.version} Bundled" />
                 </replaceregexp>
             </filterchain>
             <fileset dir="${build.path}">
@@ -150,7 +148,118 @@
             </fileset>
         </copy>
         <tar
-            destfile="${dist.path}/rych-components-${archive.release.version}.tar.gz"
+            destfile="${dist.path}/rych-components-${bundle.release.version}.tar.gz"
+            basedir="${dist.path}/tarball"
+            compression="gzip"
+        />
+    </target>
+
+    <!--
+        Package the Bencode component standalone release as a tarball.
+    -->
+    <target
+        name="dist:tarball:bencode"
+        description="Prepare the Bencode component for distribution via tarball."
+        depends="prepare"
+    >
+        <propertyprompt
+            propertyName="bencode.release.version"
+            promptText="Version string for the archive"
+            promptCharacter=":"
+            defaultValue="${release.tstamp}"
+            useExistingValue="true"
+        />
+        <copy todir="${dist.path}/tarball/rych-bencode-${bencode.release.version}">
+            <filterchain>
+                <replaceregexp>
+                    <regexp pattern="\$Id:?.*\$" replace="${bencode.release.version}" />
+                </replaceregexp>
+            </filterchain>
+            <fileset dir="${build.path}">
+                <include name="library/Rych/Bencode**" />
+                <include name="tests/Rych/Bencode**" />
+                <include name="tests/_files/Rych/Bencode**" />
+                <include name="tests/logs**" />
+                <include name="tests/bootstrap.php" />
+                <include name="tests/phpunit.xml" />
+            </fileset>
+        </copy>
+        <tar
+            destfile="${dist.path}/rych-bencode-${bencode.release.version}.tar.gz"
+            basedir="${dist.path}/tarball"
+            compression="gzip"
+        />
+    </target>
+
+    <!--
+        Package the Gravatar component standalone release as a tarball.
+    -->
+    <target
+        name="dist:tarball:gravatar"
+        description="Prepare the Gravatar component for distribution via tarball."
+        depends="prepare"
+    >
+        <propertyprompt
+            propertyName="gravatar.release.version"
+            promptText="Version string for the archive"
+            promptCharacter=":"
+            defaultValue="${release.tstamp}"
+            useExistingValue="true"
+        />
+        <copy todir="${dist.path}/tarball/rych-gravatar-${gravatar.release.version}">
+            <filterchain>
+                <replaceregexp>
+                    <regexp pattern="\$Id:?.*\$" replace="${gravatar.release.version}" />
+                </replaceregexp>
+            </filterchain>
+            <fileset dir="${build.path}">
+                <include name="library/Rych/Gravatar**" />
+                <include name="tests/Rych/Gravatar**" />
+                <include name="tests/_files/Rych/Gravatar**" />
+                <include name="tests/logs**" />
+                <include name="tests/bootstrap.php" />
+                <include name="tests/phpunit.xml" />
+            </fileset>
+        </copy>
+        <tar
+            destfile="${dist.path}/rych-gravatar-${gravatar.release.version}.tar.gz"
+            basedir="${dist.path}/tarball"
+            compression="gzip"
+        />
+    </target>
+
+    <!--
+        Package the Ip2Location component standalone release as a tarball.
+    -->
+    <target
+        name="dist:tarball:ip2location"
+        description="Prepare the Ip2Location component for distribution via tarball."
+        depends="prepare"
+    >
+        <propertyprompt
+            propertyName="ip2location.release.version"
+            promptText="Version string for the archive"
+            promptCharacter=":"
+            defaultValue="${release.tstamp}"
+            useExistingValue="true"
+        />
+        <copy todir="${dist.path}/tarball/rych-ip2location-${ip2location.release.version}">
+            <filterchain>
+                <replaceregexp>
+                    <regexp pattern="\$Id:?.*\$" replace="${ip2location.release.version}" />
+                </replaceregexp>
+            </filterchain>
+            <fileset dir="${build.path}">
+                <include name="library/Rych/Ip2Location**" />
+                <include name="tests/Rych/Ip2Location**" />
+                <include name="tests/logs**" />
+                <include name="tests/_files/Rych/Ip2Location**" />
+                <include name="tests/bootstrap.php" />
+                <include name="tests/phpunit.xml" />
+            </fileset>
+        </copy>
+        <tar
+            destfile="${dist.path}/rych-ip2location-${ip2location.release.version}.tar.gz"
             basedir="${dist.path}/tarball"
             compression="gzip"
         />
