@@ -129,7 +129,7 @@
         depends="dist"
     >
         <tstamp>
-            <format property="archive.release.tstamp" pattern="%Y.%j.%H%M" />
+            <format property="archive.release.tstamp" pattern="%Y.%j.%H%M%z" />
         </tstamp>
         <propertyprompt
             propertyName="archive.release.version"
