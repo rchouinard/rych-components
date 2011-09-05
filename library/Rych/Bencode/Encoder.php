@@ -2,31 +2,36 @@
 /**
  * Ryan Chouinard's Components
  *
- * @category    Rych
- * @package     Rych_Bencode
- * @author      Ryan Chouinard <rchouinard@gmail.com>
- * @copyright   Copyright (c) 2010 Ryan Chouinard
- * @license     New BSD License
- * @version     $Id$
+ * @category   Rych
+ * @package    Rych_Bencode
+ * @author     Ryan Chouinard <rchouinard@gmail.com>
+ * @copyright  Copyright (c) 2010 Ryan Chouinard
+ * @license    New BSD License
  */
 
 /**
- * @category    Rych
- * @package     Rych_Bencode
- * @author      Ryan Chouinard <rchouinard@gmail.com>
- * @license     New BSD License
+ * @namespace
+ *
  */
-class Rych_Bencode_Encoder
+namespace Rych\Bencode;
+
+/**
+ * @category   Rych
+ * @package    Rych_Bencode
+ * @author     Ryan Chouinard <rchouinard@gmail.com>
+ * @license    New BSD License
+ */
+class Encoder
 {
 
     /**
-     * @var     mixed
+     * @var mixed
      */
     protected $_data;
 
     /**
-     * @param   array   $data
-     * @return  void
+     * @param array $data
+     * @return void
      */
     protected function __construct($data)
     {
@@ -34,9 +39,9 @@ class Rych_Bencode_Encoder
     }
 
     /**
-     * @param   mixed   $data
-     * @return  string
-     * @throws  Rych_Bencode_Exception
+     * @param mixed $data
+     * @return string
+     * @throws Rych_Bencode_Exception
      */
     static public function encode($data)
     {
@@ -53,7 +58,7 @@ class Rych_Bencode_Encoder
     }
 
     /**
-     * @return  string
+     * @return string
      */
     protected function _encode($data = null)
     {
@@ -72,7 +77,7 @@ class Rych_Bencode_Encoder
     }
 
     /**
-     * @return  string
+     * @return string
      */
     protected function _encodeInteger($data = null)
     {
@@ -81,7 +86,7 @@ class Rych_Bencode_Encoder
     }
 
     /**
-     * @return  string
+     * @return string
      */
     protected function _encodeString($data = null)
     {
@@ -90,7 +95,7 @@ class Rych_Bencode_Encoder
     }
 
     /**
-     * @return  string
+     * @return string
      */
     protected function _encodeList($data = null)
     {
@@ -104,7 +109,7 @@ class Rych_Bencode_Encoder
     }
 
     /**
-     * @return  string
+     * @return string
      */
     protected function _encodeDict($data = null)
     {
