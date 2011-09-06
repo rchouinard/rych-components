@@ -1,23 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit bootstrap="./bootstrap.php" colors="true" verbose="true">
-    <testsuite name="All Tests">
-        <directory>./</directory>
-    </testsuite>
+
+    <testsuites>
+        <testsuite name="Bencode">
+            <directory>./library/Rych/Bencode</directory>
+        </testsuite>
+    </testsuites>
+
     <filter>
         <whitelist>
-            <directory suffix=".php">../library/</directory>
+            <directory suffix=".php">../library/Rych/Bencode</directory>
         </whitelist>
     </filter>
+
     <logging>
-        <log
-            type="coverage-html"
-            target="./logs/report"
-            charset="UTF-8"
-            yui="true"
-            highlight="true"
-            lowUpperBound="50"
-            highLowerBound="80"
-        />
+        <log type="coverage-html" target="./logs/report" charset="UTF-8" yui="true" highlight="true" lowUpperBound="50" highLowerBound="80" />
         <log type="testdox-html" target="./logs/testdox.html" />
     </logging>
+
 </phpunit>
