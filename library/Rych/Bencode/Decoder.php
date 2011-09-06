@@ -123,7 +123,7 @@ class Decoder
 
             // String
             default:
-                if ($this->_isDigit($currentChar)) {
+                if (ctype_digit($currentChar)) {
                     return $this->_decodeString();
                 }
 
@@ -144,7 +144,7 @@ class Decoder
      *
      *   Example: i3e represents the integer "3"
      *
-     * @throwns Rych\Bencode\Exception\RuntimeException
+     * @throws Rych\Bencode\Exception\RuntimeException
      * @return integer
      */
     protected function _decodeInteger()
@@ -181,7 +181,7 @@ class Decoder
      *   Example: l4:spam4:eggse represents the list of two strings:
      *   [ "spam", "eggs" ]
      *
-     * @throwns Rych\Bencode\Exception\RuntimeException
+     * @throws Rych\Bencode\Exception\RuntimeException
      * @return array
      */
     protected function _decodeList()
@@ -230,7 +230,7 @@ class Decoder
      *   Example: d9:publisher3:bob17:publisher-webpage15:www.example.com18:publisher.location4:homee
      *     represents { "publisher" => "bob", "publisher-webpage" => "www.example.com", "publisher.location" => "home" }
      *
-     * @throwns Rych\Bencode\Exception\RuntimeException
+     * @throws Rych\Bencode\Exception\RuntimeException
      * @return array|stdClass
      */
     protected function _decodeDict()
@@ -280,7 +280,7 @@ class Decoder
      *
      *   Example: 4:spam represents the string "spam"
      *
-     * @throwns Rych\Bencode\Exception\RuntimeException
+     * @throws Rych\Bencode\Exception\RuntimeException
      * @return string
      */
     protected function _decodeString()
@@ -291,10 +291,10 @@ class Decoder
         // *points to belly* -- FOUND IT! :-D
         $offsetOfColon = strpos($this->_source, ':', $tokenOffset);
         if (false === $offsetOfColon) {
-            throw new RuntimeException("Unterminated string entity at offset {$tokenOffset}");
+            throw new RuntimeException("Invalid string entity at offset {$tokenOffset}");
         }
 
-        $length = substr($this->_source, $tokenOffset, $offsetOfColon);
+        $length = substr($this->_source, $tokenOffset, $offsetOfColon - $tokenOffset);
         if (!ctype_digit($length)) {
             throw new RuntimeException("Invalid string entity at offset {$tokenOffset}");
         }
@@ -326,14 +326,6 @@ class Decoder
         }
 
         return $this->_source{$offset};
-    }
-
-    /**
-     * @return boolean
-     */
-    protected function _isDigit($char)
-    {
-        return ctype_digit($char);
     }
 
 }

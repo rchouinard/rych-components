@@ -46,7 +46,8 @@ class Bencode
      *
      * @uses Rych\Bencode\Decoder::decode()
      * @param string $encodedValue Bencode encoded string.
-     * @param string $decodeType Optional; flag indicating how to decode objects. See {@link Rych\Bencode\Decoder::decode()} for details.
+     * @param string $decodeType Optional; flag indicating how to decode dictionaries.
+     *     See {@link Rych\Bencode\Decoder::decode()} for details.
      * @return mixed Either an array or an object, as indicated with $decodeType.
      */
     public static function decode($encodedValue, $decodeType = self::TYPE_ARRAY)

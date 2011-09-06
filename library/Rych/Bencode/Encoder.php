@@ -27,102 +27,115 @@ class Encoder
     /**
      * @var mixed
      */
-    protected $_data;
+    protected $_value;
 
     /**
-     * @param array $data
+     * Constructor
+     *
+     * @param mixed $value The value to encode.
      * @return void
      */
-    protected function __construct($data)
+    protected function __construct($value)
     {
-        $this->_data = $data;
+        $this->_value = $value;
     }
 
     /**
-     * @param mixed $data
+     * Encode a value into a bencode encoded string.
+     *
+     * @param mixed $value The value to encode.
      * @return string
-     * @throws Rych_Bencode_Exception
      */
-    static public function encode($data)
+    static public function encode($value)
     {
-        if (is_object($data)) {
-            if (method_exists($data, 'toArray')) {
-                $data = $data->toArray();
-            } else {
-                $data = (array) $data;
-            }
-        }
-
-        $encoder = new self($data);
-        return $encoder->_encode();
+        $encoder = new self($value);
+        return $encoder->_encodeValue();
     }
 
     /**
+     * Encode the passed in value.
+     *
+     * @param mixed $value The value to encode.
      * @return string
      */
-    protected function _encode($data = null)
+    protected function _encodeValue($value = null)
     {
-        $data = is_null($data) ? $this->_data : $data;
+        $value = is_null($value) ? $this->_value : $value;
 
-        if (is_array($data) && (isset ($data[0]) || empty ($data))) {
-            return $this->_encodeList($data);
-        } else if (is_array($data)) {
-            return $this->_encodeDict($data);
-        } else if (is_numeric($data)) {
-            $data = sprintf('%.0f', round($data, 0));
-            return $this->_encodeInteger($data);
+        if (is_array($value) && (isset ($value[0]) || empty ($value))) {
+            return $this->_encodeList($value);
+        } else if (is_array($value)) {
+            return $this->_encodeDict($value);
+        } else if (is_numeric($value)) {
+            $value = sprintf('%.0f', round($value, 0));
+            return $this->_encodeInteger($value);
         } else {
-            return $this->_encodeString($data);
+            return $this->_encodeString($value);
         }
     }
 
     /**
+     * Encodes an integer into a bencode encoded string.
+     *
+     * @param integer $value The value to encode.
      * @return string
      */
-    protected function _encodeInteger($data = null)
+    protected function _encodeInteger($value = null)
     {
-        $data = is_null($data) ? $this->_data : $data;
-        return sprintf('i%se', $data);
+        $value = is_null($value) ? $this->_value : $value;
+        return sprintf('i%se', $value);
     }
 
     /**
+     * Encodes a string into a bencode encoded string.
+     *
+     * @param string $value The value to encode.
      * @return string
      */
-    protected function _encodeString($data = null)
+    protected function _encodeString($value = null)
     {
-        $data = is_null($data) ? $this->_data : $data;
-        return sprintf('%d:%s', strlen($data), $data);
+        $value = is_null($value) ? $this->_value : $value;
+        return sprintf('%d:%s', strlen($value), $value);
     }
 
     /**
+     * Encodes an array into a bencode encoded string.
+     *
+     * @param array $value The value to encode.
      * @return string
      */
-    protected function _encodeList($data = null)
+    protected function _encodeList($value = null)
     {
-        $data = is_null($data) ? $this->_data : $data;
+        $value = is_null($value) ? $this->_value : $value;
 
         $list = '';
-        foreach ($data as $item) {
-            $list .= self::encode($item);
+        foreach ($value as $decodedValue) {
+            $list .= $this->_encodeValue($decodedValue);
         }
         return "l{$list}e";
     }
 
     /**
+     * Encodes an associative array into a bencode encoded string.
+     *
+     * @param array $value The value to encode.
      * @return string
      */
-    protected function _encodeDict($data = null)
+    protected function _encodeDict($value = null)
     {
-        $data = is_null($data) ? $this->_data : $data;
-        ksort($data);
+        $value = is_null($value) ? $this->_value : $value;
 
+        // Extract array from object
+        if (is_object($value) && method_exists($value, 'toArray')) {
+            $value = $value->toArray();
+        } else if (is_object($value)) {
+            $value = (array) $value;
+        }
+
+        ksort($value);
         $dict = '';
-        foreach ($data as $key => $value) {
-
-            $key = $this->_encodeString($key);
-            $value = $this->_encode($value);
-
-            $dict .= "{$key}{$value}";
+        foreach ($value as $key => $decodedValue) {
+            $dict .= $this->_encodeString($key) . $this->_encodeValue($decodedValue);
         }
 
         return "d{$dict}e";
